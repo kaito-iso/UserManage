@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, 'お知らせ管理', _)}">
+
+<body>
+	<section>
+		<div class="container py-5 px-md-5">
+
+			<div class="d-flex justify-content-between align-items-center mb-4">
+				<div>
+					<h2 class="h4 fw-bold text-dark m-0">お知らせ管理</h2>
+					<p class="text-secondary small m-0">システム内のお知らせの投稿・編集・削除を行えます。</p>
+				</div>
+				<a th:href="@{/announcement/new}" class="btn btn-primary px-4 shadow-sm">
+					<i class="bi bi-plus-lg me-2"></i>新規作成
+				</a>
+			</div>
+
+			<div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm mb-4"
+				role="alert">
+				<i class="bi bi-check-circle-fill me-2"></i>
+				<span th:text="${successMessage}"></span>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+
+			<div class="card border-0 shadow-sm">
+				<div class="card-body p-0">
+					<div class="table-responsive">
+						<table class="table table-hover align-middle mb-0 text-center">
+							<thead class="bg-light text-secondary">
+								<tr>
+									<th style="width: 15%;">作成日</th>
+									<th style="width: 10%;">カテゴリCD</th>
+									<th style="width: 35%;">タイトル</th>
+									<th style="width: 15%;">公開開始日</th>
+									<th style="width: 15%;">公開終了日</th>
+									<th style="width: 10%;">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:if="${#lists.isEmpty(announcements)}">
+									<td colspan="6" class="text-center py-5 text-secondary">
+										登録されているお知らせはありません。
+									</td>
+								</tr>
+
+								<tr th:each="info : ${announcements}">
+									<td>
+										<span
+											th:text="${info.addDate != null ? #temporals.format(info.addDate, 'yyyy/MM/dd HH:mm') : '-'}"></span>
+									</td>
+									<td>
+										<span class="badge rounded-pill fw-normal"
+											th:classappend="${info.category != null ? info.category.color : 'bg-light text-dark'}"
+											th:text="${info.category != null ? info.category.categoryName : '未分類'}">
+											カテゴリ名
+										</span>
+									</td>
+									<td> <a th:href="@{/announcement/view/{id}(id=${info.id})}"
+											class="text-decoration-none text-dark fw-bold">
+											<span th:text="${info.title}">タイトル</span>
+										</a>
+									</td>
+									<td>
+										<span
+											th:text="${info.publishDate != null ? #temporals.format(info.publishDate, 'yyyy/MM/dd HH:mm') : '-'}"></span>
+									</td>
+									<td>
+										<span
+											th:text="${info.expiresDate != null ? #temporals.format(info.expiresDate, 'yyyy/MM/dd HH:mm') : '-'}"></span>
+									</td>
+									<td>
+										<div class="btn-group">
+											<a th:href="@{/announcement/edit/{id}(id=${info.id})}"
+												class="btn btn-outline-secondary btn-sm" title="編集">
+												<i class="bi bi-pencil"></i>
+											</a>
+											<button type="button" class="btn btn-outline-danger btn-sm"
+												th:onclick="|deleteAnnouncement('__${info.id}__')|" title="削除">
+												<i class="bi bi-trash"></i>
+											</button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="mt-4">
+				<a th:href="@{/menu}" class="btn btn-link text-secondary text-decoration-none">
+					<i class="bi bi-arrow-left me-1"></i>メニューに戻る
+				</a>
+			</div>
+		</div>
+
+		<form id="delete-form" method="post" style="display: none;"></form>
+
+		<script th:inline="javascript">
+			function deleteAnnouncement(id) {
+				if (confirm("このお知らせを削除してもよろしいですか？")) {
+					const form = document.getElementById('delete-form');
+					const url = /*[[ @{/announcement/delete/} ]]*/ '/announcement/delete/';
+					form.action = url + id;
+					form.submit();
+				}
+			}
+		</script>
+	</section>
+</body>
+
+</html>

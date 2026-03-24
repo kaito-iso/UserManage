@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, '新規登録', _)}">
+
+<body>
+	<section>
+		<div class="container-fluid py-5 px-md-5">
+			<div class="row justify-content-center">
+				<div class="col-12">
+					<div class="card border-0 shadow-sm">
+						<div class="card-header bg-white py-3 border-bottom">
+							<h2 class="h5 mb-0 fw-bold text-dark text-center">ユーザーアカウント作成</h2>
+						</div>
+
+						<div class="card-body p-4 p-md-5">
+
+							<div th:if="${successMessage}" class="alert alert-success border-0 shadow-sm mb-4">
+								<i class="bi bi-check-circle-fill me-2"></i>
+								<span th:text="${successMessage}"></span>
+							</div>
+
+							<div th:if="${duplicationError}" class="alert alert-danger border-0 shadow-sm mb-4">
+								<i class="bi bi-exclamation-triangle-fill me-2"></i>
+								<span th:text="${duplicationError}"></span>
+							</div>
+
+							<form th:action="@{/sign-up}" th:object="${signUpForm}" method="post">
+
+								<h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+									アカウント情報・システム権限
+								</h6>
+
+								<div class="row g-4 mb-5 align-items-end">
+									<div class="col-md-3">
+										<label class="form-label small fw-bold text-secondary">
+											ユーザーID (社員番号)
+										</label>
+										<span class="badge rounded-pill bg-danger-subtle text-danger ms-1"
+											style="font-size: 0.7rem;">必須</span>
+										<input type="text" th:field="*{userId}" class="form-control bg-light border-0"
+											th:errorclass="is-invalid">
+										<div class="invalid-feedback" th:errors="*{userId}"></div>
+									</div>
+
+									<div class="col-md-3">
+										<label class="form-label small fw-bold text-secondary">
+											初期パスワード
+										</label>
+										<span class="badge rounded-pill bg-danger-subtle text-danger ms-1"
+											style="font-size: 0.7rem;">必須</span>
+										<input type="password" th:field="*{password}"
+											class="form-control bg-light border-0" th:errorclass="is-invalid">
+										<div class="invalid-feedback" th:errors="*{password}"></div>
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label small fw-bold text-secondary d-block">
+											システム権限
+										</label>
+										<div class="mt-2 ms-2">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" th:field="*{role}"
+													value="ROLE_USER" id="roleUser">
+												<label class="form-check-label small fw-bold"
+													for="roleUser">一般ユーザー</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" th:field="*{role}"
+													value="ROLE_ADMIN" id="roleAdmin">
+												<label class="form-check-label small fw-bold"
+													for="roleAdmin">管理者</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+									基本情報（氏名）
+								</h6>
+
+								<div class="mb-5">
+									<div class="row g-4 mb-3">
+										<div class="col-md-6">
+											<label class="form-label small fw-bold text-secondary">姓</label>
+											<input type="text" th:field="*{familyName}"
+												class="form-control border-top-0 border-start-0 border-end-0 rounded-0 px-0"
+												placeholder="山田" th:errorclass="is-invalid">
+											<div class="invalid-feedback" th:errors="*{familyName}"></div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label small fw-bold text-secondary">名</label>
+											<input type="text" th:field="*{givenName}"
+												class="form-control border-top-0 border-start-0 border-end-0 rounded-0 px-0"
+												placeholder="太郎" th:errorclass="is-invalid">
+											<div class="invalid-feedback" th:errors="*{givenName}"></div>
+										</div>
+									</div>
+
+									<div class="row g-4">
+										<div class="col-md-6">
+											<label class="form-label small fw-bold text-secondary">セイ</label>
+											<input type="text" th:field="*{familyNameKana}"
+												class="form-control border-top-0 border-start-0 border-end-0 rounded-0 px-0"
+												placeholder="ヤマダ" th:errorclass="is-invalid">
+											<div class="invalid-feedback" th:errors="*{familyNameKana}"></div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label small fw-bold text-secondary">メイ</label>
+											<input type="text" th:field="*{givenNameKana}"
+												class="form-control border-top-0 border-start-0 border-end-0 rounded-0 px-0"
+												placeholder="タロウ" th:errorclass="is-invalid">
+											<div class="invalid-feedback" th:errors="*{givenNameKana}"></div>
+										</div>
+									</div>
+								</div>
+
+								<h6 class="fw-bold text-primary mb-3 border-bottom pb-2 mt-5">
+									所属・日程・属性
+								</h6>
+
+								<div class="row g-4 mb-4">
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">所属部署</label>
+										<select th:field="*{deptCd}" class="form-select bg-light border-0">
+											<option value="">選択してください</option>
+											<option th:each="dept : ${departments}" th:value="${dept.deptCd}"
+												th:text="${dept.deptName}">
+											</option>
+										</select>
+									</div>
+
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">役職</label>
+										<select th:field="*{positionCd}" class="form-select bg-light border-0">
+											<option value="">選択してください</option>
+											<option th:each="post : ${positions}" th:value="${post.positionCd}"
+												th:text="${post.positionName}">
+											</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="row g-4 mb-4">
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">誕生日</label>
+										<input type="date" th:field="*{birthday}"
+											class="form-control bg-light border-0">
+									</div>
+
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">入社日</label>
+										<input type="date" th:field="*{hireDate}"
+											class="form-control bg-light border-0">
+									</div>
+								</div>
+
+								<div class="row g-4 mb-5">
+									<div class="col-md-6">
+										<label class="form-label small fw-bold text-secondary d-block">性別</label>
+										<div class="mt-2">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" th:field="*{gender}"
+													value="M" id="genderM">
+												<label class="form-check-label small" for="genderM">男性</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" th:field="*{gender}"
+													value="F" id="genderF">
+												<label class="form-check-label small" for="genderF">女性</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" th:field="*{gender}"
+													value="O" id="genderO">
+												<label class="form-check-label small" for="genderO">その他</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<h6 class="fw-bold text-primary mb-3 border-bottom pb-2 mt-5">
+									連絡先
+								</h6>
+
+								<div class="row g-4 mb-4">
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">メールアドレス</label>
+										<input type="email" th:field="*{mail}" class="form-control bg-light border-0"
+											placeholder="example@company.com" th:errorclass="is-invalid">
+										<div class="invalid-feedback" th:errors="*{mail}"></div>
+									</div>
+
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">内線番号</label>
+										<input type="text" th:field="*{extensionTel}"
+											class="form-control bg-light border-0" th:errorclass="is-invalid"
+											placeholder="0000">
+										<div class="invalid-feedback" th:errors="*{extensionTel}"></div>
+									</div>
+
+									<div class="col-md-4">
+										<label class="form-label small fw-bold text-secondary">携帯番号</label>
+										<input type="text" th:field="*{mobileTel}"
+											class="form-control bg-light border-0" th:errorclass="is-invalid"
+											placeholder="090-0000-0000">
+										<div class="invalid-feedback" th:errors="*{mobileTel}"></div>
+									</div>
+								</div>
+
+								<div class="row justify-content-center mt-5">
+									<div class="col-md-4 d-grid gap-2">
+										<button type="submit" class="btn btn-dark py-2 fw-bold shadow-sm">
+											この内容で登録する
+										</button>
+										<a th:href="@{/menu}"
+											class="btn btn-link text-secondary text-decoration-none btn-sm">
+											メニューへ戻る
+										</a>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

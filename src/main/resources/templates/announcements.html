@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, 'お知らせ', _)}">
+
+<body>
+	<section>
+		<div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="col-md-10">
+					<h2 class="mb-4 fw-bold border-bottom pb-2">
+						<i class="bi bi-info-circle-fill text-primary me-2"></i>お知らせ一覧
+					</h2>
+
+					<div th:if="${#lists.isEmpty(announcements)}" class="alert alert-light text-center py-5 shadow-sm">
+						<p class="mb-0 text-muted">現在、新しいお知らせはありません。</p>
+					</div>
+
+					<div class="list-group shadow-sm">
+						<div th:each="a : ${announcements}" class="list-group-item list-group-item-action p-4">
+							<div class="d-flex w-100 justify-content-between align-items-center mb-2">
+								<div>
+									<span class="badge rounded-pill bg-primary me-2"
+										th:text="${a.category.categoryName}">カテゴリ</span>
+									<small class="text-secondary"
+										th:text="${#temporals.format(a.publishDate, 'yyyy/MM/dd HH:mm')}">2026/01/19</small>
+								</div>
+							</div>
+
+							<h4 class="mb-2 fw-bold text-dark" th:text="${a.title}">お知らせのタイトル</h4>
+
+							<p class="mb-0 text-secondary lh-lg" th:text="${a.content}" style="white-space: pre-wrap;">
+								お知らせの内容がここに入ります...
+							</p>
+						</div>
+					</div>
+
+					<div class="mt-4 text-center">
+						<a th:href="@{/menu}" class="btn btn-outline-secondary px-5">
+							トップページへ戻る
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

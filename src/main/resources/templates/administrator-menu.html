@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, '管理者メニュー', _)}">
+
+<body>
+	<section>
+		<div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="col-12 col-md-8 col-lg-6">
+
+					<h2 class="fw-bold text-center mb-4">管理者メニュー</h2>
+
+					<div class="list-group shadow-sm">
+						<a th:href="@{/announcement/list}" class="list-group-item list-group-item-action">
+							お知らせ一覧
+						</a>
+					</div>
+
+					<a th:href="@{/menu}" class="btn btn-outline-secondary me-md-2">
+						キャンセル
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

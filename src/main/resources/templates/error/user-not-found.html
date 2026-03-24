@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, 'ユーザー未検出', _)}">
+
+<body>
+	<section>
+		<div class="container py-5 text-center">
+			<div class="py-5">
+				<i class="bi bi-person-x text-warning" style="font-size: 6rem;"></i>
+
+				<h1 class="display-4 fw-bold mt-4">User Not Found</h1>
+				<p class="lead text-muted">指定されたユーザーは見つかりませんでした。</p>
+				<p>既に削除されたか、URLが正しくない可能性があります。</p>
+
+				<hr class="my-4 mx-auto" style="max-width: 400px;">
+
+				<div class="d-flex justify-content-center gap-3">
+					<a th:href="@{/users-view}" class="btn btn-outline-secondary btn-lg px-4">
+						ユーザー一覧へ
+					</a>
+					<a th:href="@{/menu}" class="btn btn-primary btn-lg px-4 shadow">
+						メニューへ戻る
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

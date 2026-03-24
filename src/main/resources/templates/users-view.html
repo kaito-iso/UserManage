@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, 'ユーザー一覧', ~{::link})}">
+
+<head>
+	<link rel="stylesheet" th:href="@{/style/users-view.css}">
+</head>
+
+<body>
+	<section>
+
+		<div class="container py-5">
+			<h2 class="h4 mb-4 fw-bold text-dark border-bottom pb-3">ユーザー一覧</h2>
+
+			<div class="card mb-4 border-0 shadow-sm bg-light">
+				<div class="card-body p-3">
+					<form th:action="@{/users-view}" th:object="${usersForm}" method="get"
+						class="d-flex align-items-center gap-2 m-0">
+						<div style="width: 320px;">
+							<input type="text" th:field="*{searchName}" class="form-control" placeholder="名前またはカナで検索">
+						</div>
+						<button type="submit" class="btn btn-dark px-4">検索</button>
+						<a th:href="@{/sign-up}" class="btn btn-outline-success px-4">新規登録</a>
+						<a th:href="@{/menu}" class="btn btn-outline-secondary px-4">戻る</a>
+					</form>
+				</div>
+			</div>
+
+			<div class="table-container shadow-sm">
+				<table class="table align-middle text-center">
+					<thead>
+						<tr>
+							<th style="width: 15%;">ユーザーID</th>
+							<th style="width: 20%;">部署</th>
+							<th style="width: 25%;">氏名</th>
+							<th style="width: 40%;">メールアドレス</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="user : ${users}" th:data-href="@{/users-view/{id}(id=${user.userId})}"
+							class="clickable-row">
+
+							<td class="user-id-text" th:text="${user.userId}"></td>
+
+							<td>
+								<div th:each="ud : ${user.userDepartments}">
+									<span th:if="${ud.isMain}" class="dept-badge"
+										th:text="${ud.department.deptName}"></span>
+								</div>
+							</td>
+
+							<td>
+								<div class="fw-bold">
+									<span th:text="${user.familyName}"></span>
+									<span th:text="${user.givenName}"></span>
+								</div>
+								<div class="text-muted" style="font-size: 0.75rem;"
+									th:text="${user.familyNameKana} + ${user.givenNameKana}"></div>
+							</td>
+
+							<td class="text-muted" th:text="${user.mail}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const rows = document.querySelectorAll(".clickable-row");
+				rows.forEach(row => {
+					row.addEventListener("click", () => {
+						const url = row.getAttribute("data-href");
+						if (url) {
+							row.style.backgroundColor = "#e9ecef";
+							window.location.href = url;
+						}
+					});
+				});
+			});
+		</script>
+	</section>
+</body>
+
+</html>

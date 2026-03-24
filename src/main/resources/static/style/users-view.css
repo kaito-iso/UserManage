@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+/* 1. テーブル全体の枠組み */
+.table-container {
+	border: 1px solid #dee2e6;
+	border-radius: 4px;
+	overflow: hidden;
+	background-color: white;
+}
+
+.table {
+	margin: 0;
+	border-collapse: collapse;
+}
+
+/* 2. 項目行：濃いグレーで差別化 */
+.table thead th {
+	background-color: #343a40;
+	color: #ffffff;
+	font-weight: 600;
+	padding: 12px;
+	border: none;
+}
+
+/* 3. 明細行：カーソルを合わせた時の動き */
+.clickable-row {
+	cursor: pointer;
+	background-color: #ffffff;
+	border-bottom: 1px solid #dee2e6;
+	transition: transform 0.2s ease, background-color 0.2s ease;
+	position: relative;
+}
+
+/* ホバー時：右にスライド ＋ 左に青ライン */
+.clickable-row:hover {
+	background-color: #f8f9fa !important;
+	transform: translateX(6px);
+	box-shadow: inset 4px 0 0 0 #007bff;
+}
+
+/* クリック時：一瞬沈む */
+.clickable-row:active {
+	transform: translateX(2px);
+	background-color: #e9ecef !important;
+}
+
+/* IDと部署の色分け */
+.user-id-text {
+	color: #495057;
+	font-weight: 600;
+}
+
+.dept-badge {
+	display: inline-block;
+	padding: 2px 10px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	color: #0d6efd;
+	background-color: #e7f1ff;
+	border: 1px solid #cfe2ff;
+	border-radius: 4px;
+	transition: all 0.2s;
+}
+
+/* ホバー時にバッジを強調 */
+.clickable-row:hover .dept-badge {
+	background-color: #0d6efd;
+	color: #ffffff;
+}

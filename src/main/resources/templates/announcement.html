@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, 'お知らせ登録・編集', _)}">
+
+<body>
+	<section>
+		<div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-10">
+					<div class="card shadow-sm">
+						<div class="card-body p-4 p-md-5">
+
+							<h2 class="card-title mb-4 text-center fw-bold"
+								th:text="${announcementsForm.id == null} ? 'お知らせ新規登録' : 'お知らせ編集'">
+								お知らせ
+							</h2>
+
+							<form th:action="@{/announcement/save}" th:object="${announcementsForm}" method="post">
+
+								<input type="hidden" th:field="*{id}">
+
+								<!-- タイトル -->
+								<div class="mb-3">
+									<label class="form-label small fw-bold">タイトル</label>
+									<input type="text" class="form-control" th:field="*{title}"
+										th:errorclass="is-invalid" placeholder="例：年末年始の休暇について">
+									<div class="invalid-feedback" th:errors="*{title}"></div>
+								</div>
+
+								<!-- カテゴリー -->
+								<div class="mb-3">
+									<label class="form-label small fw-bold">カテゴリー</label>
+									<select class="form-select" th:field="*{categoryCd}" th:errorclass="is-invalid">
+										<option value="">-- 選択してください --</option>
+										<option th:each="c : ${categories}" th:value="${c.categoryCd}"
+											th:text="${c.categoryName}"></option>
+									</select>
+									<div class="invalid-feedback" th:if="${#fields.hasErrors('categoryCd')}"
+										th:errors="*{categoryCd}"></div>
+								</div>
+
+								<!-- 内容 -->
+								<div class="mb-4">
+									<label class="form-label small fw-bold">内容</label>
+									<textarea class="form-control" th:field="*{content}" th:errorclass="is-invalid"
+										rows="6" placeholder="詳細を入力してください"></textarea>
+									<div class="invalid-feedback" th:errors="*{content}"></div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 mb-3 pe-md-3">
+										<label class="form-label small fw-bold">公開開始日時</label>
+										<input type="datetime-local" class="form-control" th:field="*{publishDate}"
+											th:errorclass="is-invalid" step="60">
+										<div class="invalid-feedback" th:if="${#fields.hasErrors('publishDate')}"
+											th:errors="*{publishDate}"></div>
+									</div>
+
+									<div class="col-md-6 mb-3 ps-md-3">
+										<label class="form-label small fw-bold">公開終了日時（任意）</label>
+										<input type="datetime-local" class="form-control" th:field="*{expiresDate}"
+											th:errorclass="is-invalid" step="60">
+										<div class="invalid-feedback" th:if="${#fields.hasErrors('expiresDate')}"
+											th:errors="*{expiresDate}"></div>
+									</div>
+								</div>
+
+								<!-- ボタン -->
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+									<button type="submit" class="btn btn-primary px-4">
+										保存する
+									</button>
+									<a th:href="@{/administrator/menu}" class="btn btn-outline-secondary me-md-2">
+										キャンセル
+									</a>
+								</div>
+
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::section}, 'ユーザー編集', _)}">
+
+<body>
+	<section>
+		<div class="container-fluid py-5 px-md-5">
+
+			<form th:action="@{'/users-view/' + ${userEditForm.userId}}" th:object="${userEditForm}" method="post">
+
+				<div th:if="${successMessage}"
+					class="alert alert-success d-flex align-items-center py-3 px-4 mb-4 shadow-sm" role="alert"
+					style="font-size:1.1rem; border-radius:0.5rem;">
+					<i class="bi bi-check-circle-fill me-2" style="font-size:1.4rem;"></i>
+					<div>
+						[[${successMessage}]]
+					</div>
+				</div>
+
+				<div class="card border-0 shadow-sm">
+					<div class="card-body p-4 p-md-5">
+
+						<h6 class="fw-bold text-primary mb-3 border-bottom pb-2">アカウント・権限</h6>
+
+						<div class="row g-4 mb-5">
+							<div class="col-md-4">
+								<label class="form-label small fw-bold text-secondary">ユーザーID</label>
+								<input type="text" th:field="*{userId}" class="form-control bg-light border-0" readonly>
+							</div>
+
+							<div class="col-md-4">
+								<label class="form-label small fw-bold text-secondary">アカウント状態</label>
+								<select th:field="*{accountEnabled}" class="form-select bg-light border-0">
+									<option th:value="true">有効</option>
+									<option th:value="false">無効</option>
+								</select>
+							</div>
+
+							<div class="col-md-4">
+								<label class="form-label small fw-bold text-secondary">権限</label>
+								<select th:field="*{role}" class="form-select bg-light border-0">
+									<option value="ROLE_USER">一般ユーザー</option>
+									<option value="ROLE_ADMIN">管理者</option>
+								</select>
+							</div>
+						</div>
+
+						<h6 class="fw-bold text-primary mb-3 border-bottom pb-2">基本情報</h6>
+
+						<div class="row g-4 mb-4">
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">姓</label>
+								<input type="text" th:field="*{familyName}" class="form-control"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{familyName}"></div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">名</label>
+								<input type="text" th:field="*{givenName}" class="form-control"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{givenName}"></div>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label small fw-bold text-secondary">メールアドレス</label>
+								<input type="email" th:field="*{mail}" class="form-control" th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{mail}"></div>
+							</div>
+						</div>
+
+						<div class="row g-4 mb-5">
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">姓（カナ）</label>
+								<input type="text" th:field="*{familyNameKana}" class="form-control"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{familyNameKana}"></div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">名（カナ）</label>
+								<input type="text" th:field="*{givenNameKana}" class="form-control"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{givenNameKana}"></div>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label small fw-bold text-secondary">メイン所属部署</label>
+								<select th:field="*{mainDeptCd}" class="form-select" th:errorclass="is-invalid">
+									<option value="">選択してください</option>
+									<option th:each="dept : ${departments}" th:value="${dept.deptCd}"
+										th:text="${dept.deptName}">
+									</option>
+								</select>
+								<div class="invalid-feedback" th:errors="*{mainDeptCd}"></div>
+							</div>
+						</div>
+
+						<h6 class="fw-bold text-primary mb-3 border-bottom pb-2">所属・連絡先・日程</h6>
+
+						<div class="row g-4 mb-4">
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">役職</label>
+								<select th:field="*{positionCd}" class="form-select bg-light border-0">
+									<option value="">選択してください</option>
+									<option th:each="post : ${positions}" th:value="${post.positionCd}"
+										th:text="${post.positionName}">
+									</option>
+								</select>
+							</div>
+
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">性別</label>
+								<div class="mt-2">
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" th:field="*{gender}" value="M">
+										<label class="form-check-label small">男性</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" th:field="*{gender}" value="F">
+										<label class="form-check-label small">女性</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" th:field="*{gender}" value="O">
+										<label class="form-check-label small">その他</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row g-4 mb-4">
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">内線番号</label>
+								<input type="text" th:field="*{extensionTel}" class="form-control bg-light border-0"
+									th:errorclass="is-invalid" placeholder="例：1234">
+								<div class="invalid-feedback" th:errors="*{extensionTel}"></div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">携帯番号</label>
+								<input type="text" th:field="*{mobileTel}" class="form-control bg-light border-0"
+									th:errorclass="is-invalid" placeholder="例：090-1234-5678">
+								<div class="invalid-feedback" th:errors="*{mobileTel}"></div>
+							</div>
+						</div>
+
+						<div class="row g-4 mb-5">
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">誕生日</label>
+								<input type="date" th:field="*{birthday}" class="form-control bg-light border-0"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{birthday}"></div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">入社日</label>
+								<input type="date" th:field="*{hireDate}" class="form-control bg-light border-0"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{hireDate}"></div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="form-label small fw-bold text-secondary">退職日</label>
+								<input type="date" th:field="*{resignationDate}" class="form-control bg-light border-0"
+									th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:errors="*{resignationDate}"></div>
+							</div>
+						</div>
+
+					</div>
+					<div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center p-4">
+						<div>
+							<button type="button" class="btn btn-outline-danger px-4"
+								th:onclick="|deleteUser('__*{userId}__')|">
+								<i class="bi bi-trash me-2"></i>ユーザーを削除
+							</button>
+						</div>
+
+						<div class="d-flex gap-2">
+							<button type="submit" class="btn btn-dark px-5 fw-bold shadow-sm">
+								<i class="bi bi-save me-2"></i>更新内容を保存
+							</button>
+							<a th:href="@{/users-view}" class="btn btn-outline-secondary px-5">
+								一覧に戻る
+							</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<form id="delete-form" method="post" style="display: none;"></form>
+
+		<script th:inline="javascript">
+
+			function deleteUser(userId) {
+				if (confirm("ユーザーID: " + userId + " を完全に削除してもよろしいですか？")) {
+					const form = document.getElementById('delete-form');
+
+					const baseUrl = /*[[ @{/users-view/} ]]*/ '/users-view/';
+
+					form.action = baseUrl + userId + '/delete';
+					form.submit();
+				}
+			}
+		</script>
+
+		<script th:src="@{/script/common.js}"></script>
+	</section>
+</body>
+
+</html>
